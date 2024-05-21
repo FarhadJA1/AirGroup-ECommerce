@@ -1,0 +1,33 @@
+CREATE DATABASE AirGroupDb
+
+USE AirGroupDb
+
+CREATE TABLE Products(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(50) NOT NULL,
+    Description NVARCHAR(250) NOT NULL,
+    Price DECIMAL(5,2) NOT NULL,
+    Stock INT NOT NULL CHECK(Stock > 0),
+    IsDeleted BIT NOT NULL DEFAULT 0
+)
+
+CREATE TABLE Customers(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    Firstname NVARCHAR(50) NOT NULL,
+    Lastname NVARCHAR(50) NOT NULL,
+    Gender INT NOT NULL CHECK(Gender > 0),
+    IsDeleted BIT NOT NULL DEFAULT 0
+)
+
+CREATE TABLE Orders(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    CreatedAt DATETIME2(0) NOT NULL,
+    CustomerId INT NOT NULL FOREIGN KEY REFERENCES Customers(Id)
+)
+
+CREATE TABLE OrderItems(
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    ProductId INT NOT NULL FOREIGN KEY REFERENCES Products(Id),
+    OrderId INT NOT NULL FOREIGN KEY REFERENCES Orders(Id),
+    Quantity INT NOT NULL CHECK(Quantity > 0)
+)
